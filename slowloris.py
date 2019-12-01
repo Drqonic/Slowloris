@@ -92,7 +92,6 @@ def doconnections(num):
 	global failed, packetcount
 
 	sock = []
-	first = [0 for i in range(num)]
 	working = [0 for i in range(num)]
 
 	while True:
