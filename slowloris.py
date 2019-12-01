@@ -146,16 +146,13 @@ def doconnections(num):
 			if working[i]:
 				if sock[i]:
 					handle = sock[i]
-					try:
-						if handle.send(b"X-a: b\r\n"):
-							working[i] = 1
-							packetcount += 1
-						else:
-							working[i] = 0
-							failed += 1
-							failedconnections += 1
-					except socket.error:
-						pass
+					if handle.send(b"X-a: b\r\n"):
+						working[i] = 1
+						packetcount += 1
+					else:
+						working[i] = 0
+						failed += 1
+						failedconnections += 1
 				else:
 					working[i] = 0
 					failed += 1
@@ -165,8 +162,13 @@ def doconnections(num):
 
 def domultithreading(num):
 	num //= 50
+	threadslist = []
+
 	for i in range(num):
-		threading.Thread(target=doconnections, args=(num,)).start()
+		thread = threading.Thread(target=doconnections, daemon=True, args=(num,))
+		thread.start()
+
+	thread.join()
 
 if args.test:
 	times = [2, 30, 90, 240, 500]
