@@ -166,11 +166,14 @@ def doconnections():
 def domultithreading(num):
 	num //= 50
 
-	for i in range(num):
-		thread = threading.Thread(target=doconnections, daemon=True)
-		thread.start()
+	if num > 0:
+		for i in range(num):
+			thread = threading.Thread(target=doconnections, daemon=True)
+			thread.start()
 
-	thread.join()
+		thread.join()
+	else:
+		sys.exit("Failed to connect. {} is not enough sockets.".format(args.connections))
 
 if args.test:
 	times = [2, 30, 90, 240, 500]
@@ -254,8 +257,6 @@ if args.test:
 		tweak the -timeout flag down to less than 10 seconds but it still may not 
 		build the sockets in time.
 		""".format(delay))
-
-	sys.exit()
 else:
 	print("Connecting to {}:{} every {} seconds with {} sockets:".format(args.host, args.port, args.timeout, args.connections))
 	domultithreading(args.connections)
