@@ -92,12 +92,12 @@ def doconnections():
 	global failed, packetcount
 
 	sock = []
-	working = [0 for i in range(50+1)]
+	working = [0 for i in range(50)]
 
 	while True:
 		failedconnections = 0
 		print("\t\tBuilding sockets.");
-		for i in range(50+1):
+		for i in range(50):
 			if not working[i]:
 				sock.append(socket.socket(socket.AF_INET, socket.SOCK_STREAM))
 				sock[i].settimeout(args.tcpto)
@@ -142,7 +142,7 @@ def doconnections():
 					failedconnections += 1
 
 		print("\t\tSending data.")
-		for i in range(50+1):
+		for i in range(50):
 			if working[i]:
 				if sock[i]:
 					handle = sock[i]
