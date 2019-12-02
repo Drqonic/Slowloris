@@ -88,16 +88,16 @@ if args.httpready:
 else:
 	method = "GET"
 
-def doconnections(num):
+def doconnections():
 	global failed, packetcount
 
 	sock = []
-	working = [0 for i in range(num)]
+	working = [0 for i in range(50+1)]
 
 	while True:
 		failedconnections = 0
 		print("\t\tBuilding sockets.");
-		for i in range(num):
+		for i in range(50+1):
 			if not working[i]:
 				sock.append(socket.socket(socket.AF_INET, socket.SOCK_STREAM))
 				sock[i].settimeout(args.tcpto)
@@ -142,7 +142,7 @@ def doconnections(num):
 					failedconnections += 1
 
 		print("\t\tSending data.")
-		for i in range(num):
+		for i in range(50+1):
 			if working[i]:
 				if sock[i]:
 					handle = sock[i]
@@ -162,10 +162,9 @@ def doconnections(num):
 
 def domultithreading(num):
 	num //= 50
-	threadslist = []
 
 	for i in range(num):
-		thread = threading.Thread(target=doconnections, daemon=True, args=(num,))
+		thread = threading.Thread(target=doconnections, daemon=True)
 		thread.start()
 
 	thread.join()
