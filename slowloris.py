@@ -91,7 +91,7 @@ else:
 def doconnections():
 	global failed, packetcount
 
-	sock = [0 for i in range(50)]
+	sock = []
 	working = [0 for i in range(50)]
 
 	while True:
@@ -99,7 +99,7 @@ def doconnections():
 		print("\t\tBuilding sockets.");
 		for i in range(50):
 			if not working[i]:
-				sock[i] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+				sock.append(socket.socket(socket.AF_INET, socket.SOCK_STREAM))
 				sock[i].settimeout(args.tcpto)
 
 				if args.ssl:
