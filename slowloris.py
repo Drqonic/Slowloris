@@ -146,13 +146,16 @@ def doconnections():
 			if working[i]:
 				if sock[i]:
 					handle = sock[i]
-					if handle.send(b"X-a: b\r\n"):
-						working[i] = 1
-						packetcount += 1
-					else:
-						working[i] = 0
-						failed += 1
-						failedconnections += 1
+					try:
+						if handle.send(b"X-a: b\r\n"):
+							working[i] = 1
+							packetcount += 1
+						else:
+							working[i] = 0
+							failed += 1
+							failedconnections += 1
+					except socket.error:
+						pass
 				else:
 					working[i] = 0
 					failed += 1
