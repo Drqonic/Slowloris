@@ -5,7 +5,7 @@ import socket
 import argparse
 import threading
 
-print("""
+sys.stdout.write("""
 CCCCCCCCCCOOCCOOOOO888@8@8888OOOOCCOOO888888888@@@@@@@@@8@8@@@@888OOCooocccc::::
 CCCCCCCCCCCCCCCOO888@888888OOOCCCOOOO888888888888@88888@@@@@@@888@8OOCCoococc:::
 CCCCCCCCCCCCCCOO88@@888888OOOOOOOOOO8888888O88888888O8O8OOO8888@88@@8OOCOOOCoc::
@@ -34,7 +34,7 @@ coooCCO8@88OO8O888Oo:::... ..  :cO8Oc. . .....  :.  .:ccCoooooccoooocccccooooCCC
   .  .. ... ..    .. ..   ..:...:cooc::cccccc:.....  .........  .....:::::ccoocc
        .   .         .. ..::cccc:.::ccoocc:. ........... ..  . ..:::.:::::::ccco
  Welcome to Slowloris - the low bandwidth, yet greedy and poisonous HTTP client
-""", end="")
+""")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-shost", "-s", type=str, required=False)
